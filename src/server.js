@@ -5,6 +5,7 @@ const movieRouter = require("./movie/movieRoutes")
 const userRouter = require("./user/userRoutes")
 
 const app = express()
+require("dotenv").config();
 const port = process.env.PORT || 5001
 
 app.use(express.json())

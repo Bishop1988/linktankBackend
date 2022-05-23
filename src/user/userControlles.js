@@ -1,14 +1,34 @@
 const User = require("./userModel")
+const jwt = require("jsonwebtoken");
+
+// exports.signUp = async (req, res) => {
+//     try {
+//         const newUser = await User.create(req.body)
+//         res.status(200).send({ username: newUser.username })
+//     } catch (err) {
+//         console.log(err)  
+//         res.status(500).send({ error: err.message })    
+//     }
+// }
 
 exports.signUp = async (req, res) => {
     try {
-        const newUser = await User.create(req.body)
-        res.status(200).send({ username: newUser.username })
-    } catch (err) {
-        console.log(err)  
-        res.status(500).send({ error: err.message })    
+        const newUser = await User.create({
+            email: req.body.email,
+            username: req.body.username,
+            password: req.body.password,
+        });
+        const token = await jwt.sign({ _id: newUser._id }, process.env.SECRET);
+        res.status(200).send({
+            message: "Sucessful user creation",
+            user: newUser,
+            token,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ err: error.message });
     }
-}
+};
 
 exports.login = async (req, res) => {
     try {
