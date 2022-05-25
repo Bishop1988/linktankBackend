@@ -48,12 +48,26 @@ exports.listUsers = async (req, res) => {
     }
 }
 
+// exports.updateUser = async (req, res) => {
+//     const id = req.params.id
+//     try {
+//         const user = await User.updateOne(
+//             { _id: id },
+//             { username: req.body.username }
+//         )
+//         res.status(200).send({ user })
+//     } catch (err) {
+//         console.log(err)
+//         res.status(500).send({ error: err.message })
+//     }
+// }
+
 exports.updateUser = async (req, res) => {
     const id = req.params.id
     try {
         const user = await User.updateOne(
             { _id: id },
-            { username: req.body.username }
+            { $push: {socialLinks: req.body.updateObj} }
         )
         res.status(200).send({ user })
     } catch (err) {
