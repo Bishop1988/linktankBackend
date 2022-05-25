@@ -38,10 +38,20 @@ exports.login = async (req, res) => {
     }
 }
 
-exports.listUsers = async (req, res) => {
+// exports.listUsers = async (req, res) => {
+//     try {
+//         const users = await User.find({})
+//         res.status(200).send({ users })
+//     } catch (err) {
+//         console.log(err)
+//         res.status(500).send({ error: err.message })
+//     }
+// }
+
+exports.getUser = async (req, res) => {
     try {
-        const users = await User.find({})
-        res.status(200).send({ users })
+        const user = await User.findOne({username: req.body.username})
+        res.status(200).send({ user })
     } catch (err) {
         console.log(err)
         res.status(500).send({ error: err.message })
