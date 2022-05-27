@@ -1,5 +1,7 @@
 const bcrypt = require("bcryptjs")
 const User = require("../user/userModel")
+const jwt = require("jsonwebtoken");
+const { restart } = require("nodemon");
 
 exports.hashPass = async (req, res, next) => {
     try {
@@ -42,5 +44,18 @@ exports.authenticateEmail = async (req, res, next) => {
     } catch (err) {
         console.log(err)
         res.status(500).send({ message: err.message })
+    }
+}
+
+exports.tokenCheck = async (req, res, next) => {
+    try {
+        const token = req.header("Authorization").replace("Bearer ", "");
+        const decoded = await jwt.verify(token, process.env.SECRET);
+        const user = await User.findById(decoded._id);
+        req.user = user;
+        next();
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ err: error.message });
     }
 }
