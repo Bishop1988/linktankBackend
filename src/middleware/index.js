@@ -9,8 +9,8 @@ exports.hashPass = async (req, res, next) => {
         next()
     } catch (err) {
         console.log(err)
-        res.status(500).send({ error: err.message })
-    }
+        res.status(500).send({ error: err.message })}
+    
 }
 
 exports.authenticate = async (req, res, next) => {
@@ -49,13 +49,16 @@ exports.authenticateEmail = async (req, res, next) => {
 
 exports.tokenCheck = async (req, res, next) => {
     try {
-        const token = req.header("Authorization").replace("Bearer ", "");
-        const decoded = await jwt.verify(token, process.env.SECRET);
-        const user = await User.findById(decoded._id);
-        req.user = user;
+      const token = req.header("Authorization");
+      const decodedToken = await jwt.verify(token, process.env.SECRET);
+      req.user = await User.findById(decodedToken.id);
+      if (req.user) {
         next();
+      } else {
+        throw new Error("Invalid Token");
+      }
     } catch (error) {
-        console.log(error);
-        res.status(500).send({ err: error.message });
+      console.log(error);
+      res.status(500).send({ err: error.message });
     }
-}
+  };
