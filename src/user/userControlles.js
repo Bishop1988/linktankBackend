@@ -73,12 +73,12 @@ exports.getUser = async (req, res) => {
 // }
 
 exports.updateUser = async (req, res) => {
-    const id = req.params.id
     try {
-        const user = await User.updateOne(
-            { _id: id },
+        await User.updateOne(
+            { username: req.body.username },
             { $push: {socialLinks: req.body.updateObj} }
         )
+        const user = await User.findOne({username: req.body.username})
         res.status(200).send({ user })
     } catch (err) {
         console.log(err)
