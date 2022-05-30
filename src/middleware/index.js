@@ -5,7 +5,7 @@ const { restart } = require("nodemon");
 
 exports.hashPass = async (req, res, next) => {
     try {
-        req.body.pass = await bcrypt.hash(req.body.password, 8)
+        req.body.password = await bcrypt.hash(req.body.password, 8)
         next()
     } catch (err) {
         console.log(err)

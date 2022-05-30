@@ -86,10 +86,68 @@ exports.updateUser = async (req, res) => {
     }
 }
 
-exports.deleteUser = async (req, res) => {
-    const id = req.params.id
+exports.deleteLink = async (req, res) => {
     try {
-        const user = await User.deleteOne({ _id: id })
+        // find the user
+        const user = await User.findOne({ username: req.body.username })
+        // manipulate the array using the index from the front-end
+        user.socialLinks.splice(req.body.index, 1)
+        // update the stored array with the manipulated array
+        await User.updateOne(
+            { username: req.body.username },
+            { socialLinks: user.socialLinks }
+        )
+        // find the newly updated user
+        const updatedUser = await User.findOne({ username: req.body.username })
+        // send the updated user back
+        res.status(200).send({ user: updatedUser })
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+exports.updateUserLinkSocialName = async (req, res) => {
+    try {
+        // find the user
+        const user = await User.findOne({ username: req.body.username })
+        // target the object that we want to edit using the index from the map on the front end
+        user.socialLinks[req.body.index].socialName = req.body.socialName
+        // update the stored array with the manipulated array
+        await User.updateOne(
+            { username: req.body.username },
+            { socialLinks: user.socialLinks }
+        )
+        // find the newly updated user
+        const updatedUser = await User.findOne({ username: req.body.username })
+        // send the updated user back
+        res.status(200).send({ user: updatedUser })
+    } catch (err) {
+        console.log(err)
+    }
+}
+exports.updateUserLinkUrl = async (req, res) => {
+    try {
+        // find the user
+        const user = await User.findOne({ username: req.body.username })
+        // target the object that we want to edit using the index from the map on the front end
+        user.socialLinks[req.body.index].url = req.body.url
+        // update the stored array with the manipulated array
+        await User.updateOne(
+            { username: req.body.username },
+            { socialLinks: user.socialLinks }
+        )
+        // find the newly updated user
+        const updatedUser = await User.findOne({ username: req.body.username })
+        // send the updated user back
+        res.status(200).send({ user: updatedUser })
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+exports.deleteUser = async (req, res) => {
+    try {
+        const user = await User.deleteOne({ username: req.body.username })
         res.status(200).send({ user })
     } catch (err) {
         console.log(err)
