@@ -16,6 +16,6 @@ userRouter.put("/user/link", deleteLink)
 userRouter.put("/user/linkUrl", updateUserLinkUrl)
 userRouter.put("/user/linkSocial", updateUserLinkSocialName)
 
-userRouter.get("/token", tokenCheck, login);
+userRouter.get("/user", tokenCheck, login);
 
 module.exports = userRouter

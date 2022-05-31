@@ -49,10 +49,14 @@ exports.authenticateEmail = async (req, res, next) => {
 
 exports.tokenCheck = async (req, res, next) => {
     try {
-        const token = req.header("Authorization").replace("Bearer ", "");
+        const token = req.header("Authorization");
         const decoded = await jwt.verify(token, process.env.SECRET);
-        const user = await User.findById(decoded._id);
-        req.user = user;
+        req.user = await User.findById(decoded._id);
+        if (req.user) {
+            next()
+        } else {
+            throw new Error("Invalid Token")
+        }
         next();
     } catch (error) {
         console.log(error);

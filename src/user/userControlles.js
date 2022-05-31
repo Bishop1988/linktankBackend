@@ -32,11 +32,14 @@ exports.signUp = async (req, res) => {
 
 exports.login = async (req, res) => {
     try {
-        res.status(200).send({ user: req.user })
+        const user = await User.findOne({email: req.body.email })
+        console.log({user})
+        res.status(200).send(user)
     } catch (err) {
-        console.log(err)
+        console.log(err);
+        res.status(500).send({ err: error.message });
     }
-}
+};
 
 // exports.listUsers = async (req, res) => {
 //     try {
