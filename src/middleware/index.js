@@ -49,16 +49,16 @@ exports.authenticateEmail = async (req, res, next) => {
 
 exports.tokenCheck = async (req, res, next) => {
     try {
-      const token = req.header("Authorization");
-      const decodedToken = await jwt.verify(token, process.env.SECRET);
-      req.user = await User.findById(decodedToken.id);
-      if (req.user) {
-        next();
-      } else {
-        throw new Error("Invalid Token");
-      }
+        const token = req.header("Authorization");
+        const decoded = await jwt.verify(token, process.env.SECRET);
+        req.user = await User.findById(decoded.id);
+        if (req.user) {
+            next();
+        } else {
+            throw new Error("Invalid Token");
+        }        
     } catch (error) {
-      console.log(error);
-      res.status(500).send({ err: error.message });
+        console.log(error);
+        res.status(500).send({ err: error.message })
     }
   };
